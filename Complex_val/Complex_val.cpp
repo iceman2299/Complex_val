@@ -29,9 +29,30 @@ Complex Complex::operator-(const Complex& b)
 Complex Complex::operator*(const Complex& b)
 {
 	Complex res;
-	res.re = re * b.re;
-	res.im = im * b.im;
+	res.re = ((re * b.re) - (im * b.im));
+	res.im = ((re * b.im) + (b.re * im));
 	std::cout << "\x1b[1;35mПройдена перегрузка оператора умножения\x1b[1;0m" << std::endl;
+	return res;
+}
+
+Complex Complex::operator/(const Complex& b)
+{
+	Complex res;
+	try
+	{
+		if ((b.re * b.re + b.im * b.im) == 0)
+		throw - 1;
+	}
+	catch (int errcode)
+	{
+		std::cerr << "\x1b[1;31mДеление невозможно т.к. в знаменателе образовался ноль\x1b[1;0m" << std::endl;
+		res.re = 0;
+		res.im = 0;
+		return res;
+	}
+	res.re = ((re * b.re) + (im * b.im)) / (b.re * b.re + b.im * b.im);
+	res.im = ((b.re * im) - (re * b.im)) / (b.re * b.re + b.im * b.im);
+	std::cout << "\x1b[1;35mПройдена перегрузка оператора деления\x1b[1;0m" << std::endl;
 	return res;
 }
 
@@ -80,15 +101,22 @@ std::ostream& operator<<(std::ostream& os, const Complex& a)
 	return os;
 }
 
+std::istream& operator>>(std::istream& is, Complex& a)
+{
+	std::cout << "Введите вещественную часть" << std::endl;
+	is >> a.re;
+	std::cout << "Введите мнимую часть" << std::endl;
+	is >> a.im;
+	return is;
+}
+
 int main()
 {
 	setlocale(LC_ALL, "RUS");
 	int re, im;
-	std::cout << "Введите вещественную часть" << std::endl;
-	std::cin >> re;
-	std::cout << "Введите мнимую часть" << std::endl;
-	std::cin >> im;
-	Complex a(re, im);
+	std::cout << "\x1b[1;32mВведите первое комплексное число\x1b[0m" << std::endl;
+	Complex a;
+	std::cin >> a;
 	std::cout << "Первое число: " << std::endl << a;
 	Complex b(a);
 	std::cout << "Второе число: " << std::endl << b;
@@ -96,10 +124,17 @@ int main()
 	std::cout << "Результат сложения этих двух чисел через функцию: " << std::endl << c;
 	Complex d = a + c;
 	std::cout << "Результат сложения первого числа и предыдущего результата: " << std::endl << d;
-	Complex k = d + 3;
-	std::cout << "Результат сложения предыдущего результата и числа 3: "<< std::endl << k;
-	Complex l = k * 2;
-	std::cout << "Умножаю предыдущее число на два: " << std::endl << l;
+	std::cout << "\x1b[1;32mВведите еще одно комплексное число для операций\x1b[0m" << std::endl;
+	Complex temp;
+	std::cin >> temp;
+	Complex k = d + temp;
+	std::cout << "Результат сложения предыдущего результата и нового числа: "<< std::endl << k;
+	Complex n = k - temp;
+	std::cout << "Результат вычитания нового числа из предыдущего результата: " << std::endl << n;
+	Complex l = n * temp;
+	std::cout << "Умножаю предыдущее число на новое: " << std::endl << l;
+	Complex m = l / temp;
+	std::cout << "Делю предыдущее число на новое: " << std::endl << m;
 	system("pause");
 }
 

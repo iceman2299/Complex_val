@@ -1,5 +1,6 @@
 #pragma once
 #include "String.h"
+#include <iostream>
 
 class Complex
 {
@@ -15,6 +16,9 @@ public:
 	void setre(int);
 	void setim(int);
 	Complex operator+(const Complex& b);
+	Complex operator-(const Complex& b);
+	Complex operator*(const Complex& b);
+	friend std::ostream& operator<< (std::ostream& os, const Complex& a);
 	Complex(int _re);
 
 };

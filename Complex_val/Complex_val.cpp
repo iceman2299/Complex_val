@@ -13,7 +13,25 @@ Complex Complex::operator+(const Complex& b)
 	Complex res;
 	res.re = re + b.re;
 	res.im = im + b.im;
-	std::cout << "\x1b[1;35mПройдена перегрузка оператора+\x1b[1;0m" << std::endl;
+	std::cout << "\x1b[1;35mПройдена перегрузка оператора сложения\x1b[1;0m" << std::endl;
+	return res;
+}
+
+Complex Complex::operator-(const Complex& b)
+{
+	Complex res;
+	res.re = re - b.re;
+	res.im = im - b.im;
+	std::cout << "\x1b[1;35mПройдена перегрузка оператора вычитания\x1b[1;0m" << std::endl;
+	return res;
+}
+
+Complex Complex::operator*(const Complex& b)
+{
+	Complex res;
+	res.re = re * b.re;
+	res.im = im * b.im;
+	std::cout << "\x1b[1;35mПройдена перегрузка оператора умножения\x1b[1;0m" << std::endl;
 	return res;
 }
 
@@ -55,6 +73,13 @@ Complex summa(const Complex& complex1, const Complex& complex2)
 	return c;
 }
 
+std::ostream& operator<<(std::ostream& os, const Complex& a)
+{
+	std::cout << "\x1b[1;33mОтработала перегрузка вывода: \x1b[0m" << std::endl;
+	os << a.re << "+" << a.im << "i" << std::endl;
+	return os;
+}
+
 int main()
 {
 	setlocale(LC_ALL, "RUS");
@@ -64,15 +89,17 @@ int main()
 	std::cout << "Введите мнимую часть" << std::endl;
 	std::cin >> im;
 	Complex a(re, im);
-	std::cout << "Первое число: " << a.getre() << "+" << a.getim() << "i" << std::endl;
+	std::cout << "Первое число: " << std::endl << a;
 	Complex b(a);
-	std::cout << "Второе число: " << b.getre() << "+" << b.getim() << "i" << std::endl;
+	std::cout << "Второе число: " << std::endl << b;
 	Complex c = summa(a, b);
-	std::cout << "Результат сложения этих двух чисел через функцию: " << c.getre() << "+" << c.getim() << "i" << std::endl;
+	std::cout << "Результат сложения этих двух чисел через функцию: " << std::endl << c;
 	Complex d = a + c;
-	std::cout << "Результат сложения первого числа и предыдущего результата: " << d.getre() << "+" << d.getim() << "i" << std::endl;
+	std::cout << "Результат сложения первого числа и предыдущего результата: " << std::endl << d;
 	Complex k = d + 3;
-	std::cout << "Результат сложения предыдущего результата и числа 3: " << k.getre() << "+" << k.getim() << "i" << std::endl;
+	std::cout << "Результат сложения предыдущего результата и числа 3: "<< std::endl << k;
+	Complex l = k * 2;
+	std::cout << "Умножаю предыдущее число на два: " << std::endl << l;
 	system("pause");
 }
 

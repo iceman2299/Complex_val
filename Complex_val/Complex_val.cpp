@@ -56,6 +56,61 @@ Complex Complex::operator/(const Complex& b)
 	return res;
 }
 
+int Complex::operator== (const Complex& b)
+{
+	return ((re == b.re) && (im == b.im));
+}
+
+int Complex::operator!= (const Complex& b)
+{
+	return ((re != b.re) || (im != b.im)) || ((re != b.re) && (im != b.im));
+}
+
+int Complex::operator>(const Complex& b)
+{
+	int smcode = (*this == b);
+	if (smcode == 1)
+	{
+		return 3;
+	}
+	else
+	{
+		if (re != b.re)
+			return (re >= b.re);
+		else
+			return (im >= b.im);
+	}
+}
+
+int Complex::operator<(const Complex& b)
+{
+	int smcode = (*this == b);
+	if (smcode == 1)
+	{
+		return 3;
+	}
+	else
+	{
+		if (re != b.re)
+			return (re <= b.re);
+		else
+			return (im <= b.im);
+	}
+}
+Complex Complex::operator++()
+{
+	re = re + 1;
+	im = im + 1;
+	return *this;
+}
+
+Complex Complex::operator++(int)
+{
+	Complex res(*this);
+	++ *this;
+	return res;
+}
+
 Complex::Complex(int _re)
 {
 	re = _re;
@@ -97,7 +152,14 @@ Complex summa(const Complex& complex1, const Complex& complex2)
 std::ostream& operator<<(std::ostream& os, const Complex& a)
 {
 	std::cout << "\x1b[1;33mОтработала перегрузка вывода: \x1b[0m" << std::endl;
-	os << a.re << "+" << a.im << "i" << std::endl;
+	if (a.im < 0)
+	{
+		os << a.re << a.im << "i" << std::endl;
+	}
+	else
+	{
+		os << a.re << "+" << a.im << "i" << std::endl;
+	}
 	return os;
 }
 
@@ -113,7 +175,7 @@ std::istream& operator>>(std::istream& is, Complex& a)
 int main()
 {
 	setlocale(LC_ALL, "RUS");
-	int re, im;
+	//Основные операции
 	std::cout << "\x1b[1;32mВведите первое комплексное число\x1b[0m" << std::endl;
 	Complex a;
 	std::cin >> a;
@@ -128,13 +190,95 @@ int main()
 	Complex temp;
 	std::cin >> temp;
 	Complex k = d + temp;
-	std::cout << "Результат сложения предыдущего результата и нового числа: "<< std::endl << k;
+	std::cout << "Результат сложения предыдущего результата и нового числа: " << std::endl << k;
 	Complex n = k - temp;
 	std::cout << "Результат вычитания нового числа из предыдущего результата: " << std::endl << n;
 	Complex l = n * temp;
 	std::cout << "Умножаю предыдущее число на новое: " << std::endl << l;
 	Complex m = l / temp;
 	std::cout << "Делю предыдущее число на новое: " << std::endl << m;
+	Complex o = a++;
+	std::cout << "Постфиксный инкремент первого числа: " << std::endl << o;//Увеличивает А и не трогает рез
+	Complex p = ++a;
+	std::cout << "Префиксный инкремент первого числа (я сломал голову пока думал почему это правильно и так и должно быть): " << std::endl << p;//Еще увеличивает А и выводит его как рез
+
+
+	
+	//Сравнение чисел
+	std::cout << "\x1b[1;32mВведите первое число для сравнения\x1b[0m" << std::endl;
+	Complex first;
+	std::cin >> first;
+	std::cout << "\x1b[1;32mВведите второе число для сравнения\x1b[0m" << std::endl;
+	Complex second;
+	std::cin >> second;
+
+	int simcode = (first == second);
+	switch (simcode)
+	{
+	case 1:
+	{
+		std::cout << "\x1b[1;33mПервое и второе число равны (оператор ==)\x1b[0m" << std::endl;
+		break;
+	}
+	case 0:
+	{
+		std::cout << "\x1b[1;33mПервое и второе число не равны (оператор ==)\x1b[0m" << std::endl;
+		break;
+	}
+	}
+	int simcode2 = (first != second);
+	switch (simcode2)
+	{
+	case 1:
+	{
+		std::cout << "\x1b[1;33mПервое и второе число не равны (оператор !=)\x1b[0m" << std::endl;
+		break;
+	}
+	case 0:
+	{
+		std::cout << "\x1b[1;33mПервое и второе число равны (оператор !=)\x1b[0m" << std::endl;
+		break;
+	}
+	}
+	int maxcode = (first > second);
+	switch (maxcode)
+	{
+	case 0:
+	{
+		std::cout << "\x1b[1;36mВторое число больше (оператор >)\x1b[0m" << std::endl;
+		break;
+	}
+	case 1:
+	{
+		std::cout << "\x1b[1;36mПервое число больше (оператор >)\x1b[0m" << std::endl;
+		break;
+	}
+	case 3:
+	{
+		std::cout << "\x1b[1;36mПервое и второе число равны (оператор >)\x1b[0m" << std::endl;
+		break;
+	}
+	}
+	int mincode = (first < second);
+	switch (mincode)
+	{
+	case 0:
+	{
+		std::cout << "\x1b[1;36mВторое число меньше (оператор <)\x1b[0m" << std::endl;
+		break;
+	}
+	case 1:
+	{
+		std::cout << "\x1b[1;36mПервое число меньше (оператор <)\x1b[0m" << std::endl;
+		break;
+	}
+	case 3:
+	{
+		std::cout << "\x1b[1;36mПервое и второе число равны (оператор >)\x1b[0m" << std::endl;
+		break;
+	}
+	}
+
 	system("pause");
 }
 

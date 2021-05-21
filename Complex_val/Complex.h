@@ -19,6 +19,12 @@ public:
 	Complex operator-(const Complex& b);
 	Complex operator*(const Complex& b);
 	Complex operator/(const Complex& b);
+	int operator== (const Complex & b);
+	int operator!= (const Complex& b);
+	int operator>(const Complex& b);
+	int operator<(const Complex& b);
+	Complex operator++();
+	Complex operator++(int);
 	friend std::ostream& operator<< (std::ostream& os, const Complex& a);
 	friend std::istream& operator>> (std::istream& is, Complex& a);
 	Complex(int _re);
